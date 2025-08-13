@@ -55,6 +55,16 @@ function Projects({isOpen, setIsOpen, setSelectedProject}) {
     },
   };
 
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = "#";
+  for(let i = 0; i < 6; i++){
+    color += letters[Math.floor(Math.random() * 16)];
+
+  }
+  return color;
+}
+
   const item = {
     hidden: { y: 50, opacity: 0 },
     visible: {
@@ -85,13 +95,13 @@ function Projects({isOpen, setIsOpen, setSelectedProject}) {
       </motion.p>
 
       <motion.div
-        className="w-full max-w-6xl bg-white border rounded-2xl p-8"
+        className="proj-container w-full max-w-6xl bg-white border rounded-2xl p-8"
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         variants={container}
       >
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={container}
         >
           {projects.map((project, index) => (
@@ -112,14 +122,25 @@ function Projects({isOpen, setIsOpen, setSelectedProject}) {
 
               {/* Content container with flex-grow */}
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold mb-2 font-didot">{project.name}</h3>
+                <h3
+                  className="proj-name text-xl font-bold mb-2 font-didot"
+                  onClick={() => {
+                    const randomColor = getRandomColor();
+                    document.querySelector(
+                      ".proj-container"
+                    ).style.backgroundColor = randomColor;
+                  }}
+                >
+                  {project.name}
+                </h3>
                 <p className="text-gray-700 mb-4 flex-grow">{project.desc}</p>
 
-                <button className="primary-btn hover:bg-transparent font-sora"
-                onClick={() => {
-                  setSelectedProject(project);
-                  setIsOpen(true);
-                }}
+                <button
+                  className="primary-btn hover:bg-transparent font-sora"
+                  onClick={() => {
+                    setSelectedProject(project);
+                    setIsOpen(true);
+                  }}
                 >
                   Read more
                 </button>

@@ -1,80 +1,84 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const links = [
-  {
-    name: "About Me",
-    href: "#aboutme",
-  },
-  {
-    name: "Projects",
-    href: "#projects",
-  },
-  {
-    name: "Skills",
-    href: "#skills",
-  },
-  {
-    name: "Contact",
-    href: "#contact",
-  },
+  { name: "Home", href: "#home" },
+  { name: "About Me", href: "#aboutme" },
+  { name: "Projects", href: "#projects" },
+  { name: "Skills", href: "#skills" },
+  { name: "Contact", href: "#contact" },
 ];
 
 function Navbar() {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-        when: "beforeChildren",
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [activeLink, setActiveLink] = useState("");
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3 },
-    },
-    hover: {
-      scale: 1.05,
-      color: "#3b82f6",
-      transition: { duration: 0.2 },
-    },
+  // Show/hide navbar on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  // Observe sections to set active link while scrolling
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveLink(`#${entry.target.id}`);
+          }
+        });
+      },
+      { threshold: 0.6 } // Section becomes active when 60% visible
+    );
+
+    links.forEach((link) => {
+      const section = document.querySelector(link.href);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const containerVariants = {
+    hidden: { y: "-100%", transition: { duration: 0.4, ease: "easeInOut" } },
+    visible: { y: 0, transition: { duration: 0.4, ease: "easeInOut" } },
   };
 
   return (
     <motion.div
-      className="absolute px-10 py-5 w-full flex justify-center"
-      initial="hidden"
-      animate="visible"
+      className="fixed z-50 px-10 py-3 w-full flex justify-center"
       variants={containerVariants}
+      initial="visible"
+      animate={showNavbar ? "visible" : "hidden"}
     >
       <div className="glass-morphism w-[70%] py-4 rounded-4xl px-10 flex justify-between items-center">
-        <motion.p
-          className="font-didot text-xl font-bold"
-          variants={itemVariants}
-        >
-          Portfolio
-        </motion.p>
+        <p className="font-didot text-xl font-bold">Portfolio</p>
 
         <div className="flex justify-evenly gap-5 text-sm">
           {links.map((item) => (
-            <motion.a
-              key={item}
-              className="link"
+            <a
+              key={item.name}
+              className={`${
+                activeLink === item.href
+                  ? "text-pink-600 font-bold"
+                  : "text-black"
+              } hover:text-pink-400 transition-colors`}
               href={item.href}
-              variants={itemVariants}d
+              onClick={() => setActiveLink(item.href)}
             >
               {item.name}
-            </motion.a>
+            </a>
           ))}
         </div>
       </div>

@@ -6,8 +6,6 @@ import { X } from "lucide-react";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
 
-
-
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);

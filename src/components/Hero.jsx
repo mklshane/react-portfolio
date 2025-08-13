@@ -29,7 +29,7 @@ function Hero() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" id="home">
       <Navbar />
       <div className="w-full h-[100dvh] bg flex justify-center items-center border-b">
         <motion.div
