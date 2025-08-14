@@ -14,7 +14,7 @@ function Navbar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeLink, setActiveLink] = useState("");
 
-  // Show/hide navbar on scroll
+  // show/hide navbar on scroll
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -29,7 +29,7 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // Observe sections to set active link while scrolling
+  // observe sections to set active link while scrolling
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
