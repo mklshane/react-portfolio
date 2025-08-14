@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const links = [
   { name: "Home", href: "#home" },
@@ -13,6 +14,7 @@ function Navbar() {
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeLink, setActiveLink] = useState("");
+/*   const navigate = useNavigate(); */
 
   // show/hide navbar on scroll
   useEffect(() => {
@@ -63,7 +65,9 @@ function Navbar() {
       animate={showNavbar ? "visible" : "hidden"}
     >
       <div className="glass-morphism w-[70%] py-4 rounded-4xl px-10 flex justify-between items-center">
-        <p className="font-didot text-xl font-bold">Portfolio</p>
+        <a href="/" className="font-didot text-xl font-bold" 
+        /* onClick={() => navigate('/') }*/
+        >Portfolio</a>
 
         <div className="flex justify-evenly gap-5 text-sm">
           {links.map((item) => (
